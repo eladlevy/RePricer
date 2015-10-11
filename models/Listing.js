@@ -14,6 +14,7 @@ var listingSchema = new mongoose.Schema({
     PictureDetails: {
       PictureURL: [{type: String, default: ''}]
     },
+    PrimaryCategory: {CategoryID: String},
     PayPalEmailAddress: { type: String, default: '' }
   }
 });
