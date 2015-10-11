@@ -2,14 +2,9 @@ var secrets = require('../config/secrets');
 var User = require('../models/User');
 var querystring = require('querystring');
 var async = require('async');
-var cheerio = require('cheerio');
 var request = require('request');
 var _ = require('underscore');
 var graph = require('fbgraph');
-var LastFmNode = require('lastfm').LastFmNode;
-var tumblr = require('tumblr.js');
-var Github = require('github-api');
-var Twit = require('twit');
 var paypal = require('paypal-rest-sdk');
 
 /**
@@ -110,150 +105,6 @@ exports.getFacebook = function(req, res, next) {
   });
 };
 
-/**
- * GET /api/scraping
- * Web scraping example using Cheerio library.
- */
-
-exports.getScraping = function(req, res, next) {
-  request.get('https://news.ycombinator.com/', function(err, request, body) {
-    if (err) return next(err);
-    var $ = cheerio.load(body);
-    var links = [];
-    $('.title a').each(function() {
-      links.push($(this));
-    });
-    res.render('api/scraping', {
-      title: 'Web Scraping',
-      links: links
-    });
-  });
-};
-
-/**
- * GET /api/github
- * GitHub API Example.
- */
-exports.getGithub = function(req, res) {
-  var token = _.findWhere(req.user.tokens, { kind: 'github' });
-  var github = new Github({ token: token.accessToken });
-  var repo = github.getRepo('sahat', 'requirejs-library');
-  repo.show(function(err, repo) {
-    res.render('api/github', {
-      title: 'GitHub API',
-      repo: repo
-    });
-  });
-
-};
-
-/**
- * GET /api/aviary
- * Aviary image processing example.
- */
-
-exports.getAviary = function(req, res) {
-  res.render('api/aviary', {
-    title: 'Aviary API'
-  });
-};
-
-/**
- * GET /api/nyt
- * New York Times API example.
- */
-
-exports.getNewYorkTimes = function(req, res, next) {
-  var query = querystring.stringify({ 'api-key': secrets.nyt.key, 'list-name': 'young-adult' });
-  var url = 'http://api.nytimes.com/svc/books/v2/lists?' + query;
-  request.get(url, function(error, request, body) {
-    if (request.statusCode === 403) return next(Error('Missing or Invalid New York Times API Key'));
-    var bestsellers = JSON.parse(body);
-    res.render('api/nyt', {
-      title: 'New York Times API',
-      books: bestsellers.results
-    });
-  });
-};
-
-/**
- * GET /api/lastfm
- * Last.fm API example.
- */
-
-exports.getLastfm = function(req, res, next) {
-  var lastfm = new LastFmNode(secrets.lastfm);
-  async.parallel({
-    artistInfo: function(done) {
-      lastfm.request("artist.getInfo", {
-        artist: 'Epica',
-        handlers: {
-          success: function(data) {
-            done(null, data);
-          },
-          error: function(err) {
-            done(err);
-          }
-        }
-      });
-    },
-    artistTopAlbums: function(done) {
-      lastfm.request("artist.getTopAlbums", {
-        artist: 'Epica',
-        handlers: {
-          success: function(data) {
-            var albums = [];
-            _.each(data.topalbums.album, function(album) {
-              albums.push(album.image.slice(-1)[0]['#text']);
-            });
-            done(null, albums.slice(0,4));
-          },
-          error: function(err) {
-            done(err);
-          }
-        }
-      });
-    }
-  },
-  function(err, results) {
-    if (err) return next(err.message);
-    var artist = {
-      name: results.artistInfo.artist.name,
-      image: results.artistInfo.artist.image.slice(-1)[0]['#text'],
-      tags: results.artistInfo.artist.tags.tag,
-      bio: results.artistInfo.artist.bio.summary,
-      stats: results.artistInfo.artist.stats,
-      similar: results.artistInfo.artist.similar.artist,
-      topAlbums: results.artistTopAlbums
-    };
-    res.render('api/lastfm', {
-      title: 'Last.fm API',
-      artist: artist
-    });
-  });
-};
-
-/**
- * GET /api/twitter
- * Twiter API example.
- */
-
-exports.getTwitter = function(req, res, next) {
-  var token = _.findWhere(req.user.tokens, { kind: 'twitter' });
-  var T = new Twit({
-    consumer_key: secrets.twitter.consumerKey,
-    consumer_secret: secrets.twitter.consumerSecret,
-    access_token: token.accessToken,
-    access_token_secret: token.tokenSecret
-  });
-  T.get('search/tweets', { q: 'hackathon since:2013-01-01', geocode: '40.71448,-74.00598,5mi', count: 50 }, function(err, reply) {
-    if (err) return next(err);
-    res.render('api/twitter', {
-      title: 'Twitter API',
-      tweets: reply.statuses
-    });
-  });
-};
 
 /**
  * GET /api/paypal

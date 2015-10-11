@@ -13,7 +13,6 @@ var logger = require('morgan');
 var favicon = require('serve-favicon');
 var MongoStore = require('connect-mongo')(session);
 var flash = require('express-flash');
-var fs = require('fs');
 var path = require('path');
 var mongoose = require('mongoose');
 var passport = require('passport');
@@ -43,8 +42,6 @@ var passportConf = require('./config/passport');
  * Create Express server.
  */
 var https = require('https');
-var privateKey  = fs.readFileSync('./certs/server.key', 'utf8');
-var certificate = fs.readFileSync('./certs/server.cert', 'utf8');
 var app = express();
 
 /**
@@ -126,20 +123,20 @@ app.post('/account/profile', passportConf.isAuthenticated, userController.postUp
 app.post('/account/password', passportConf.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConf.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConf.isAuthenticated, userController.getOauthUnlink);
-app.get('/api', apiController.getApi);
-app.get('/api/foursquare', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getFoursquare);
-app.get('/api/tumblr', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getTumblr);
-app.get('/api/facebook', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getFacebook);
-app.get('/api/scraping', apiController.getScraping);
-app.get('/api/github', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getGithub);
-app.get('/api/lastfm', apiController.getLastfm);
-app.get('/api/nyt', apiController.getNewYorkTimes);
-app.get('/api/twitter', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getTwitter);
-app.get('/api/aviary', apiController.getAviary);
-app.get('/api/paypal', apiController.getPayPal);
-app.get('/api/paypal/success', apiController.getPayPalSuccess);
-app.get('/api/paypal/cancel', apiController.getPayPalCancel);
-app.get('/api/amazon/:asin', listerController.getAmazonListing);
+//app.get('/api', apiController.getApi);
+//app.get('/api/foursquare', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getFoursquare);
+//app.get('/api/tumblr', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getTumblr);
+//app.get('/api/facebook', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getFacebook);
+//app.get('/api/scraping', apiController.getScraping);
+//app.get('/api/github', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getGithub);
+//app.get('/api/lastfm', apiController.getLastfm);
+//app.get('/api/nyt', apiController.getNewYorkTimes);
+//app.get('/api/twitter', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getTwitter);
+//app.get('/api/aviary', apiController.getAviary);
+//app.get('/api/paypal', apiController.getPayPal);
+//app.get('/api/paypal/success', apiController.getPayPalSuccess);
+//app.get('/api/paypal/cancel', apiController.getPayPalCancel);
+//app.get('/api/amazon/:asin', listerController.getAmazonListing);
 
 /**
  * OAuth routes for sign-in.
@@ -169,11 +166,6 @@ app.get('/auth/tumblr/callback', passport.authorize('tumblr', { failureRedirect:
   res.redirect('/api/tumblr');
 });
 
-var credentials = {key: privateKey, cert: certificate};
-var httpsServer = https.createServer(credentials, app);
-httpsServer.listen(app.get('port'), function() {
+app.listen(app.get('port'), function() {
   console.log("✔ Express server listening on port %d in %s mode", app.get('port'), app.settings.env);
 });
-//app.listen(app.get('port'), function() {
-//  console.log("✔ Express server listening on port %d in %s mode", app.get('port'), app.settings.env);
-//});
