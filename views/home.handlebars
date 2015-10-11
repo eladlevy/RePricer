@@ -1,0 +1,14 @@
+<div class="row">
+    <h1 class="col-xs-12">Pricer, auto listing made easy</h1>
+</div>
+
+
+{{#if user}}
+    <p class="lead">
+        Welcome {{user.profile.name}}!
+    </p>
+{{else}}
+    <p class="lead">
+        Please <a href="/login">login</a>
+    </p>
+{{/if}}
