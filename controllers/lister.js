@@ -95,7 +95,7 @@ var startListing = function(user) {
             _.each(allAmazonItems, function(item) {
                 callArray.push(function(callback) {
                     item.BrowseNodes.BrowseNode = ensureArray(item.BrowseNodes.BrowseNode);
-                    var query = item.BrowseNodes.BrowseNode[0].Name;
+                    var query = item.BrowseNodes.BrowseNode[0].Name + ' ' + item.ItemAttributes.Title;
                     ebayProvider.findCategory(ebayToken, query, function(err, data) {
                         var categoryId;
                         if (data.CategoryCount > 0) {
