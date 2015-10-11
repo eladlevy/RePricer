@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>{{title}} - Starter Template for Bootstrap</title>
+  {{{css 'styles'}}}
+    <script data-main="/js/main" src="/js/lib/require.js"></script>
+</head>
+<body>
+  {{> navigation}}
+
+  <div id="wrap">
+    <div class="container">
+      {{> flash}}
+      {{{body}}}
+    </div>
+  </div>
+
+  {{> footer}}
+
+  <script type="text/javascript">
+      require(['lib/backbone-min-1.2.3'], function (Backbone) {
+          require(['lib/bootstrap.min'], function (bootstrap) {
+          });
+      });
+  </script>
+</body>
+</html>

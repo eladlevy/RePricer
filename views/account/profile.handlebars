@@ -1,0 +1,141 @@
+<div class="page-header">
+  <h3>Profile Information</h3>
+</div>
+
+<form action="/account/profile" method="POST" class="form-horizontal">
+  <div class="form-group">
+    <label class="col-xs-2 control-label" for="email">Email</label>
+
+    <div class="col-xs-4">
+      <input type="email" name="email" id="email" value="{{user.email}}" class="form-control" />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-xs-2 control-label" for="name">Name</label>
+
+    <div class="col-xs-4">
+      <input type="text" name="name" id="name" value="{{user.profile.name}}" class="form-control" />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-xs-2 control-label" for="gender">Gender</label>
+  
+    <div class="col-xs-4">
+      <label class="radio">
+        <input type="radio" {{#if_eq user.profile.gender "male"}}checked="true"{{/if_eq}} name="gender" value="male" data-toggle="radio" />
+        Male
+      </label>
+
+      <label class="radio">
+        <input type="radio" {{#if_eq user.profile.gender "female"}}checked="true"{{/if_eq}} name="gender" value="female" data-toggle="radio" />
+        Female
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-xs-2 control-label" for="location">Location</label>
+
+    <div class="col-xs-4">
+      <input type="text" name="location" id="location" value="{{user.profile.location}}" class="form-control" />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-xs-2 control-label" for="location">Website</label>
+
+    <div class="col-xs-4">
+      <input type="text" name="website" id="website" value="{{user.profile.website}}" class="form-control" />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-xs-offset-2 col-xs-4">
+      <button type="submit" class="btn btn-primary">Update Profile</button>
+    </div>
+  </div>
+</form>
+
+<div class="page-header">
+  <h3>Change Password</h3>
+</div>
+
+<form action="/account/password" method="POST" class="form-horizontal">
+  <div class="form-group">
+    <label class="col-xs-3 control-label" for="password">New Password</label>
+
+    <div class="col-xs-4">
+      <input type="password" name="password" id="password" class="form-control" />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-xs-3 control-label" for="confirmPassword">Confirm Password</label>
+
+    <div class="col-xs-4">
+      <input type="password" name="confirmPassword" id="confirmPassword" class="form-control" />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <div class="col-xs-offset-3 col-xs-4">
+      <button type="submit" class="btn btn-primary">Change Password</button>
+    </div>
+  </div>
+</form>
+
+<div class="page-header">
+  <h3>Delete Account</h3>
+</div>
+
+<p>You can delete your account, but keep in mind this action is irreversible.</p>
+
+<form action="/account/delete" method="POST">
+  <button type="submit" class="btn btn-danger">Delete my account</button>
+</form>
+
+<div class="page-header">
+  <h3>Linked Accounts</h3>
+</div>
+
+{{#if user.google}}
+  <p>
+    <a href="/account/unlink/google" class="text-danger">Unlink your Google account</a>
+  </p>
+{{else}}
+  <p>
+    <a href="/auth/google">Link your Google account</a>
+  </p>
+{{/if}}
+
+{{#if user.facebook}}
+  <p>
+    <a href="/account/unlink/facebook" class="text-danger">Unlink your Facebook account</a>
+  </p>
+{{else}}
+  <p>
+    <a href="/auth/facebook">Link your Facebook account</a>
+  </p>
+{{/if}}
+
+{{#if user.twitter}}
+  <p>
+    <a href="/account/unlink/twitter" class="text-danger">Unlink your Twitter account</a>
+  </p>
+{{else}}
+  <p>
+    <a href="/auth/twitter">Link your Twitter account</a>
+  </p>
+{{/if}}
+
+{{#if user.github}}
+  <p>
+    <a href="/account/unlink/github" class="text-danger">Unlink your GitHub account</a>
+  </p>
+{{else}}
+  <p>
+    <a href="/auth/github">Link your GitHub account</a>
+  </p>
+{{/if}}
