@@ -99,6 +99,7 @@ var startListing = function(user) {
                     ebayProvider.findCategory(ebayToken, query, function(err, data) {
                         var categoryId;
                         if (data.CategoryCount > 0) {
+                            data.SuggestedCategoryArray.SuggestedCategory = ensureArray(data.SuggestedCategoryArray.SuggestedCategory);
                             categoryId = data.SuggestedCategoryArray.SuggestedCategory[0].Category.CategoryID;
                             item.categoryId = categoryId;
                         }
