@@ -64,21 +64,6 @@ var configurations = {
             client_secret: 'Your Client Secret',
             returnUrl: 'http://localhost:3000/api/paypal/success',
             cancelUrl: 'http://localhost:3000/api/paypal/cancel'
-        },
-
-        amazon: {
-            awsId: 'AKIAIYSIOI6LC2EOHXJQ',
-            awsSecret: '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'
-        },
-
-        ebay: {
-            host: 'https://api.sandbox.ebay.com', // or api.paypal.com
-            devId: '9eb4a6f9-97ef-4156-8284-ed5463e597ea',
-            appId: 'EladLevy-67f2-47c8-b163-340d3e3a3f03',
-            certId: '7e93c421-6599-41fe-93d1-7163cf3b29aa',
-            ruName: 'Elad_Levy-EladLevy-67f2-4-ybevyf',
-            returnUrl: 'https://signin.sandbox.ebay.com/ws/eBayISAPI.dll'
-            //cancelUrl: 'http://localhost:3000/api/paypal/cancel'
         }
     },
 
@@ -150,19 +135,13 @@ var configurations = {
         },
 
         amazon: {
-            awsId: 'AKIAIYSIOI6LC2EOHXJQ',
-            awsSecret: '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'
-        },
+       },
 
         ebay: {
             host: 'https://api.ebay.com',
-            devId: '9eb4a6f9-97ef-4156-8284-ed5463e597ea',
-            appId: 'EladLevy-eecf-4f7f-bf74-70c8ea5c035d',
-            certId: 'd00a8a33-c0e4-417d-b123-0de2ddddf40d',
-            ruName: 'Elad_Levy-EladLevy-eecf-4-nebemuuj',
             returnUrl: 'https://signin.ebay.com/ws/eBayISAPI.dll'
             //cancelUrl: 'http://localhost:3000/api/paypal/cancel'
-        }
+        } 
     }
 };
 
