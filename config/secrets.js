@@ -67,8 +67,8 @@ var configurations = {
         },
 
         amazon: {
-            awsId: 'AKIAIYSIOI6LC2EOHXJQ',
-            awsSecret: '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'
+            awsId: 'AKIAJR3AXFFXUUMU2LZQ',
+            awsSecret: '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'
         },
 
         ebay: {
@@ -150,8 +150,8 @@ var configurations = {
         },
 
         amazon: {
-            awsId: 'AKIAIYSIOI6LC2EOHXJQ',
-            awsSecret: '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'
+            awsId: 'AKIAJR3AXFFXUUMU2LZQ',
+            awsSecret: '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'
         },
 
         ebay: {
