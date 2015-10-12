@@ -33,6 +33,21 @@ var buildDescription = function(features, description) {
     return html;
 };
 
+var buildItemSpecifics = function(itemAttributes) {
+    var keys = ['Brand', 'UPC', 'Color', 'Size'];
+    var result = [];
+    _.each(keys, function(key) {
+       if (itemAttributes[key]) {
+           result.push({
+               Name: key,
+               Value: itemAttributes[key]
+           });
+       }
+    });
+
+    return result;
+};
+
 var mapToEbayKeys = function(listing, amazonAttributes) {
     var MAX_TITLE_LIMIT = 80;
     var MAX_IMAGES_LIMIT = 11;
@@ -43,11 +58,14 @@ var mapToEbayKeys = function(listing, amazonAttributes) {
     var description = _.findWhere(amazonAttributes.EditorialReviews.EditorialReview, {Source: 'Product Description'});
     var data = {
         Title: amazonAttributes.ItemAttributes.Title.substring(0, MAX_TITLE_LIMIT),
-        Quantity: amazonAttributes.ItemAttributes.PackageQuantity,
+        //Quantity: amazonAttributes.ItemAttributes.PackageQuantity,
         Description: buildDescription(amazonAttributes.ItemAttributes.Feature, description),
-            StartPrice: '300.0',
-            PictureDetails: {
+        StartPrice: '300.0',
+        PictureDetails: {
             PictureURL: _.pluck(_.pluck(amazonAttributes.ImageSets.ImageSet.slice(0, MAX_IMAGES_LIMIT), 'LargeImage'), 'URL')
+        },
+        ItemSpecifics:{
+            NameValueList: buildItemSpecifics(amazonAttributes.ItemAttributes)
         },
         PrimaryCategory: {CategoryID: amazonAttributes.categoryId || '377'}
     };
