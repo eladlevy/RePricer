@@ -12,6 +12,14 @@ var userSchema = new mongoose.Schema({
   ebay: { type: String, unique: true, sparse: true },
   tokens: Array,
 
+  settings: {
+    marginPercent: { type: Number, default: '' },
+    marginMinimum: { type: Number, default: '' },
+    handelingTime: { type: Number, default: '' },
+    itemQuantity: { type: Number, default: '' },
+    returnPolicy: { type: String, default: '' }
+  },
+
   profile: {
     name: { type: String, default: '' },
     gender: { type: String, default: '' },

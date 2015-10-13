@@ -234,41 +234,8 @@ exports.getListings = function(req, res, next) {
     });
 };
 
-exports.getAmazonListing = function(req, res) {
-    var asin = req.params.asin;
-    var ebayToken = _.findWhere(req.user.get('tokens'), {kind: 'ebay'}).accessToken;
-    amazonProvider.itemLookup(asin, function(data) {
-        var attributes = JSON.parse(data);
-        var ebayListingKeys = {
-            Title: attributes.ItemAttributes.Title.substring(0, 80),
-            Description: attributes.ItemAttributes.Feature.join(' '),
-            StartPrice: '300.0',
-            PictureDetails: {
-                PictureURL: _.pluck(_.pluck(attributes.ImageSets.ImageSet, 'LargeImage'), 'URL')
-            }
-        };
-        if (ebayToken) {
-            ebayProvider.addItem(ebayToken, ebayListingKeys,function(err, data) {
-                res.send(data);
-            });
-        } else {
-            res.send('No ebay access token');
-        }
+exports.getSettings = function(req, res, next) {
+    res.render('settings', {
+        title: 'Settings'
     });
 };
-//
-//exports.getAmazonListing = function(req, res) {
-//    var asin = req.params.asin;
-//    var ebayToken = _.findWhere(req.user.get('tokens'), {kind: 'ebay'}).accessToken;
-//    //if (ebayToken) {
-//    //    ebayProvider.addItem(ebayToken, function(err, data) {
-//    //        res.send(data);
-//    //    });
-//    //} else {
-//    //    res.send('No ebay access token');
-//    //}
-//
-//    amazonProvider.itemLookup(asin, function(data) {
-//        res.send(data);
-//    });
-//};

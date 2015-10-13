@@ -19,6 +19,7 @@ var passport = require('passport');
 var expressValidator = require('express-validator');
 var exphbs = require('express-handlebars');
 var helpers = require('./lib/helpers');
+var monitor = require('./lib/monitor');
 
 /**
  * Load controllers.
@@ -116,6 +117,7 @@ app.post('/signup', userController.postSignup);
 app.get('/lister',passportConf.isAuthenticated, listerController.getLister);
 app.post('/lister',passportConf.isAuthenticated, listerController.postLister);
 app.get('/listings',passportConf.isAuthenticated, listerController.getListings);
+app.get('/settings',passportConf.isAuthenticated, listerController.getSettings);
 app.get('/contact', contactController.getContact);
 app.post('/contact', contactController.postContact);
 app.get('/account', passportConf.isAuthenticated, userController.getAccount);
@@ -136,7 +138,6 @@ app.get('/api/listings', passportConf.isAuthenticated, apiController.getListings
 //app.get('/api/paypal', apiController.getPayPal);
 //app.get('/api/paypal/success', apiController.getPayPalSuccess);
 //app.get('/api/paypal/cancel', apiController.getPayPalCancel);
-//app.get('/api/amazon/:asin', listerController.getAmazonListing);
 
 /**
  * OAuth routes for sign-in.

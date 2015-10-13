@@ -2,6 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
+    'bootstrap',
     'backgrid',
     'backbone.paginator',
     'backgrid-paginator',
@@ -10,6 +11,7 @@ define([
     $,
     _,
     Backbone,
+    bootstrap,
     backgrid,
     backbonePaginator,
     backgridFilter
