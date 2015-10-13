@@ -1,29 +1,8 @@
 <div class="row">
     <h3 class="col-xs-12">Your Listings</h3>
-    <div class="col-xs-12">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>List Name</th>
-                <th>Status</th>
-                <th>Ebay Id</th>
-                <th>ASIN</th>
-                <!--<th>Actions</th>-->
-            </tr>
-            </thead>
-            <tbody>
-            {{#each listings}}
-                <tr>
-                    <th scope="row">{{@index}}</th>
-                    <td>{{data.Title}}</td>
-                    <td>{{status}}</td>
-                    <td>{{itemId}}</td>
-                    <td>{{asin}}</td>
-                    <!--<td><a>Re-list</a> <a>Update</a></td>-->
-                </tr>
-            {{/each}}
-            </tbody>
-        </table>
+    <div class="listings-table-holder">
+        <div class="table-holder">
+
+        </div>
     </div>
 </div>

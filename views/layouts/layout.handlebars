@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
   <meta name="author" content="">
-  <title>{{title}} - Starter Template for Bootstrap</title>
+  <title>{{title}}</title>
   {{{css 'styles'}}}
     <script data-main="/js/main" src="/js/lib/require.js"></script>
 </head>
@@ -23,9 +23,11 @@
   {{> footer}}
 
   <script type="text/javascript">
-      require(['lib/backbone-min-1.2.3'], function (Backbone) {
-          require(['lib/bootstrap.min'], function (bootstrap) {
-          });
+      require(['views/MainView'], function (MainView) {
+          if ($('.listings-table-holder').length > 0) {
+              var mainView = new MainView();
+              mainView.setElement($('.listings-table-holder')).render();
+          }
       });
   </script>
 </body>
