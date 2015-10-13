@@ -24,11 +24,11 @@ var buildDescription = function(features, description) {
     var featureList = '';
     description = description || {Content: ''};
     _.each(features, function(feature) {
-       featureList +=  '<li>' + feature + '</li>';
+        featureList +=  '<li>' + feature + '</li>';
     });
     var html = description.Content + '<br><br>' +
-            '<h2>Product Features</h2>' +
-            '<ul>' + featureList + '</ul>';
+        '<h2>Product Features</h2>' +
+        '<ul>' + featureList + '</ul>';
 
     return html;
 };
@@ -37,12 +37,12 @@ var buildItemSpecifics = function(itemAttributes) {
     var keys = ['Brand', 'UPC', 'Color', 'Size'];
     var result = [];
     _.each(keys, function(key) {
-       if (itemAttributes[key]) {
-           result.push({
-               Name: key,
-               Value: itemAttributes[key]
-           });
-       }
+        if (itemAttributes[key]) {
+            result.push({
+                Name: key,
+                Value: itemAttributes[key]
+            });
+        }
     });
 
     return result;
