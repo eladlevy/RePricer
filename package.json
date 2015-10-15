@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "dependencies": {
     "amazon-product-api": "^0.3.4",
+    "apac": "^1.0.0",
     "async": "^1.4.2",
     "bcrypt-nodejs": "~0.0.3",
     "body-parser": "^1.13.3",
@@ -31,7 +32,7 @@
     "request": "~2.33.0",
     "sendgrid": "~0.4.6",
     "serve-favicon": "^2.3.0",
-    "underscore": "~1.5.2",
+    "underscore": "^1.8.3",
     "xml2js": "^0.4.12"
   }
 }

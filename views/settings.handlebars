@@ -1,39 +1,31 @@
 <div class="row">
     <h3 class="col-xs-12">Settings</h3>
-    <form role="form" method="POST" class="form-horizontal">
-        <div class="form-group">
-            <label for="email" class="col-sm-2 control-label">Name</label>
-
-            <div class="col-sm-8">
-                <input type="name" name="name" id="name" autofocus="" class="form-control">
+    <form role="form" method="POST">
+        <div class="form-inline col-xs-12 margin-bottom-sm">
+            <div class="form-group">
+                <div>
+                    <label for="marginPercent">I want to make </label>
+                    <input type="number" min="0" step="any" name="marginPercent" class="form-control" id="marginPercent" value="{{user.settings.marginPercent}}" placeholder="i.e 15">
+                    <label for="marginPercent">% profit on each sale. </label>
+                </div>
             </div>
         </div>
-
-        <div class="form-group">
-            <label for="email" class="col-sm-2 control-label">Email</label>
-
-            <div class="col-sm-8">
-                <input type="text" name="email" id="email" class="form-control">
+        <div class="form-inline col-xs-12 margin-bottom-sm">
+            <div class="form-group">
+                <label for="marginMinimum">I want to make at least</label>
+                <input type="number" min="0" step="any" class="form-control" name="marginMinimum" id="marginMinimum" value="{{user.settings.marginMinimum}}" placeholder="i.e 1.5">
+                <label for="marginMinimum">$ on each sale.</label>
             </div>
         </div>
-
-        <div class="form-group">
-            <label for="contactBody" class="col-sm-2 control-label">Body</label>
-
-            <div class="col-sm-8">
-                <textarea type="text" name="message" id="message" rows="7" class="form-control"></textarea>
+        <div class="form-inline col-xs-12 margin-bottom-sm">
+            <div class="form-group">
+                <label for="handelingTime">Handeling time is</label>
+                <input type="number" min="0" class="form-control" id="handelingTime" name="handelingTime" value="{{user.settings.handelingTime}}" placeholder="i.e 3">
+                <label for="handelingTime">business days.</label>
             </div>
         </div>
-
-        <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-8">
-                <button type="submit" class="btn btn-default">
-                    <i class="fa fa-mail-forward"></i>
-                    Send
-                </button>
-
-                <img height="34" src="/img/sendgrid.png" class="pull-right">
-            </div>
+        <div class="col-xs-12">
+            <button type="submit" class="btn btn-default">Save</button>
         </div>
     </form>
 </div>

@@ -31,6 +31,7 @@ var apiController = require('./controllers/api');
 var contactController = require('./controllers/contact');
 var ebayController = require('./controllers/ebay');
 var listerController = require('./controllers/lister');
+var monitorController = require('./controllers/monitor');
 
 /**
  * API keys + Passport configuration.
@@ -118,6 +119,8 @@ app.get('/lister',passportConf.isAuthenticated, listerController.getLister);
 app.post('/lister',passportConf.isAuthenticated, listerController.postLister);
 app.get('/listings',passportConf.isAuthenticated, listerController.getListings);
 app.get('/settings',passportConf.isAuthenticated, listerController.getSettings);
+app.post('/settings',passportConf.isAuthenticated, listerController.postSettings);
+app.get('/monitor',passportConf.isAuthenticated, monitorController.getMonitor);
 app.get('/contact', contactController.getContact);
 app.post('/contact', contactController.postContact);
 app.get('/account', passportConf.isAuthenticated, userController.getAccount);
@@ -126,6 +129,7 @@ app.post('/account/password', passportConf.isAuthenticated, userController.postU
 app.post('/account/delete', passportConf.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConf.isAuthenticated, userController.getOauthUnlink);
 app.get('/api/listings', passportConf.isAuthenticated, apiController.getListings);
+app.get('/api/runs', passportConf.isAuthenticated, apiController.getMonitorRuns);
 //app.get('/api/foursquare', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getFoursquare);
 //app.get('/api/tumblr', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getTumblr);
 //app.get('/api/facebook', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getFacebook);

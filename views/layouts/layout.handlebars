@@ -24,10 +24,11 @@
 
   <script type="text/javascript">
       require(['views/MainView'], function (MainView) {
-          if ($('.listings-table-holder').length > 0) {
-              var mainView = new MainView();
-              mainView.setElement($('.listings-table-holder')).render();
-          }
+          var mainView = new MainView();
+          mainView.setElement($('body')).render();
+//          if ($('.listings-table-holder').length > 0) {
+//
+//          }
       });
   </script>
 </body>
