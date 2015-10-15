@@ -1,0 +1,31 @@
+<div class="row">
+    <h3 class="col-xs-12">Settings</h3>
+    <form role="form" method="POST">
+        <div class="form-inline col-xs-12 margin-bottom-sm">
+            <div class="form-group">
+                <div>
+                    <label for="marginPercent">I want to make </label>
+                    <input type="number" min="0" step="any" name="marginPercent" class="form-control" id="marginPercent" value="{{user.settings.marginPercent}}" placeholder="i.e 15">
+                    <label for="marginPercent">% profit on each sale. </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-inline col-xs-12 margin-bottom-sm">
+            <div class="form-group">
+                <label for="marginMinimum">I want to make at least</label>
+                <input type="number" min="0" step="any" class="form-control" name="marginMinimum" id="marginMinimum" value="{{user.settings.marginMinimum}}" placeholder="i.e 1.5">
+                <label for="marginMinimum">$ on each sale.</label>
+            </div>
+        </div>
+        <div class="form-inline col-xs-12 margin-bottom-sm">
+            <div class="form-group">
+                <label for="handelingTime">Handeling time is</label>
+                <input type="number" min="0" class="form-control" id="handelingTime" name="handelingTime" value="{{user.settings.handelingTime}}" placeholder="i.e 3">
+                <label for="handelingTime">business days.</label>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <button type="submit" class="btn btn-default">Save</button>
+        </div>
+    </form>
+</div>

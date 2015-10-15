@@ -19,6 +19,10 @@ var passport = require('passport');
 var expressValidator = require('express-validator');
 var exphbs = require('express-handlebars');
 var helpers = require('./lib/helpers');
+<<<<<<< HEAD
+=======
+var monitor = require('./lib/monitor');
+>>>>>>> 6bbfa766598bc1544c7b9fe9ccc7272abae39631
 
 /**
  * Load controllers.
@@ -30,6 +34,10 @@ var apiController = require('./controllers/api');
 var contactController = require('./controllers/contact');
 var ebayController = require('./controllers/ebay');
 var listerController = require('./controllers/lister');
+<<<<<<< HEAD
+=======
+var monitorController = require('./controllers/monitor');
+>>>>>>> 6bbfa766598bc1544c7b9fe9ccc7272abae39631
 
 /**
  * API keys + Passport configuration.
@@ -116,6 +124,12 @@ app.post('/signup', userController.postSignup);
 app.get('/lister',passportConf.isAuthenticated, listerController.getLister);
 app.post('/lister',passportConf.isAuthenticated, listerController.postLister);
 app.get('/listings',passportConf.isAuthenticated, listerController.getListings);
+<<<<<<< HEAD
+=======
+app.get('/settings',passportConf.isAuthenticated, listerController.getSettings);
+app.post('/settings',passportConf.isAuthenticated, listerController.postSettings);
+app.get('/monitor',passportConf.isAuthenticated, monitorController.getMonitor);
+>>>>>>> 6bbfa766598bc1544c7b9fe9ccc7272abae39631
 app.get('/contact', contactController.getContact);
 app.post('/contact', contactController.postContact);
 app.get('/account', passportConf.isAuthenticated, userController.getAccount);
@@ -124,6 +138,10 @@ app.post('/account/password', passportConf.isAuthenticated, userController.postU
 app.post('/account/delete', passportConf.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConf.isAuthenticated, userController.getOauthUnlink);
 app.get('/api/listings', passportConf.isAuthenticated, apiController.getListings);
+<<<<<<< HEAD
+=======
+app.get('/api/runs', passportConf.isAuthenticated, apiController.getMonitorRuns);
+>>>>>>> 6bbfa766598bc1544c7b9fe9ccc7272abae39631
 //app.get('/api/foursquare', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getFoursquare);
 //app.get('/api/tumblr', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getTumblr);
 //app.get('/api/facebook', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getFacebook);
@@ -136,7 +154,10 @@ app.get('/api/listings', passportConf.isAuthenticated, apiController.getListings
 //app.get('/api/paypal', apiController.getPayPal);
 //app.get('/api/paypal/success', apiController.getPayPalSuccess);
 //app.get('/api/paypal/cancel', apiController.getPayPalCancel);
+<<<<<<< HEAD
 //app.get('/api/amazon/:asin', listerController.getAmazonListing);
+=======
+>>>>>>> 6bbfa766598bc1544c7b9fe9ccc7272abae39631
 
 /**
  * OAuth routes for sign-in.
