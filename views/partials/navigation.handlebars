@@ -1,71 +1,77 @@
 <div class="navbar navbar-default navbar-fixed-top">
-  <div class="container">
-    <div class="navbar-header">
-      <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="sr-only">Toggle Navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
+    <div class="container">
+        <div class="navbar-header">
+            <button class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle Navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
 
-      <a href="/" class="navbar-brand">Pricer</a>
-    </div>
+            <a href="/" class="navbar-brand">Pricer</a>
+        </div>
 
-    <div class="collapse navbar-collapse">
-      <ul class="nav navbar-nav">
-        <li class="{{#if_eq title "Home"}}active{{/if_eq}}">
-          <a href="/">Home</a>
-        </li>
-        <li class="{{#if_eq title "Lister"}}active{{/if_eq}}">
-          <a href="/lister">Lister</a>
-        </li>
-          <li class="{{#if_eq title "Listings"}}active{{/if_eq}}">
-              <a href="/listings">Listings</a>
-          </li>
-        <li class="{{#if_eq title "Contact"}}active{{/if_eq}}">
-          <a href="/contact">Contact</a>
-        </li>
-      </ul>
-
-      <ul class="nav navbar-nav navbar-right">
-        {{#unless user}}
-          <li class="{{#if_eq title "Login"}}active{{/if_eq}}">
-            <a href="/login">Login</a>
-          </li>
-          <li class="{{#if_eq title "Create Account"}}active{{/if_eq}}">
-            <a href="/signup">Create Account</a>
-          </li>
-        {{else}}
-          <li class="dropdown{{#if_eq title "Create Account"}} active{{/if_eq}}">
-            <a href="#" data-toggle="dropdown" class="dropdown-toggle">
-              {{#if user.profile.picture}}
-                <img src="{{user.profile.picture}}" class="profile-image" />
-              {{/if}}
-              {{#if user.profile.name}}
-                {{user.profile.name}}
-              {{else}}
-                {{#if user.email}}
-                  {{user.email}}
-                {{else}}
-                  {{user.id}}
-                {{/if}}
-              {{/if}}
-              &nbsp;
-              <i class="caret"></i>
-            </a>
-
-            <ul class="dropdown-menu">
-              <li>
-                <a href="/account">My Account</a>
-              </li>
-              <li class="divider"></li>
-              <li>
-                <a href="/logout">Logout</a>
-              </li>
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="{{#if_eq title "Home"}}active{{/if_eq}}">
+                    <a href="/">Home</a>
+                </li>
+                <li class="{{#if_eq title "Settings"}}active{{/if_eq}}">
+                    <a href="/settings">Settings</a>
+                </li>
+                <li class="{{#if_eq title "Lister"}}active{{/if_eq}}">
+                    <a href="/lister">Lister</a>
+                </li>
+                <li class="{{#if_eq title "Listings"}}active{{/if_eq}}">
+                    <a href="/listings">Listings</a>
+                </li>
+                <li class="{{#if_eq title "Monitor"}}active{{/if_eq}}">
+                    <a href="/monitor">Monitor</a>
+                </li>
+                <li class="{{#if_eq title "Contact"}}active{{/if_eq}}">
+                    <a href="/contact">Contact</a>
+                </li>
             </ul>
-          </li>
-        {{/unless}}
-      </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                {{#unless user}}
+                    <li class="{{#if_eq title "Login"}}active{{/if_eq}}">
+                        <a href="/login">Login</a>
+                    </li>
+                    <li class="{{#if_eq title "Create Account"}}active{{/if_eq}}">
+                        <a href="/signup">Create Account</a>
+                    </li>
+                {{else}}
+                    <li class="dropdown{{#if_eq title "Create Account"}} active{{/if_eq}}">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">
+                            {{#if user.profile.picture}}
+                                <img src="{{user.profile.picture}}" class="profile-image" />
+                            {{/if}}
+                            {{#if user.profile.name}}
+                                {{user.profile.name}}
+                            {{else}}
+                                {{#if user.email}}
+                                    {{user.email}}
+                                {{else}}
+                                    {{user.id}}
+                                {{/if}}
+                            {{/if}}
+                            &nbsp;
+                            <i class="caret"></i>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="/account">My Account</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="/logout">Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+                {{/unless}}
+            </ul>
+        </div>
     </div>
-  </div>
 </div>

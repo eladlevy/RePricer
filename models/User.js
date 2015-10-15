@@ -4,6 +4,7 @@ var bcrypt = require('bcrypt-nodejs');
 var userSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   password: String,
+  active: { type: Boolean, default: true },
 
   facebook: { type: String, unique: true, sparse: true },
   twitter: { type: String, unique: true, sparse: true },
@@ -11,6 +12,15 @@ var userSchema = new mongoose.Schema({
   github: { type: String, unique: true, sparse: true },
   ebay: { type: String, unique: true, sparse: true },
   tokens: Array,
+
+  settings: {
+    marginPercent: { type: Number, default: 15 },
+    marginMinimum: { type: Number, default: 1.5 },
+    handelingTime: { type: Number, default: 3 },
+    itemQuantity: { type: Number, default: 1 },
+    mininumQuantity: { type: Number, default: 3 },
+    returnPolicy: { type: String, default: '' }
+  },
 
   profile: {
     name: { type: String, default: '' },

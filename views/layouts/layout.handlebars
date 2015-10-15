@@ -1,34 +1,32 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <title>{{title}}</title>
-  {{{css 'styles'}}}
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>{{title}}</title>
+    {{{css 'styles'}}}
     <script data-main="/js/main" src="/js/lib/require.js"></script>
 </head>
 <body>
-  {{> navigation}}
+{{> navigation}}
 
-  <div id="wrap">
+<div id="wrap">
     <div class="container">
-      {{> flash}}
-      {{{body}}}
+        {{> flash}}
+        {{{body}}}
     </div>
-  </div>
+</div>
 
-  {{> footer}}
+{{> footer}}
 
-  <script type="text/javascript">
-      require(['views/MainView'], function (MainView) {
-          if ($('.listings-table-holder').length > 0) {
-              var mainView = new MainView();
-              mainView.setElement($('.listings-table-holder')).render();
-          }
-      });
-  </script>
+<script type="text/javascript">
+    require(['views/MainView'], function (MainView) {
+        var mainView = new MainView();
+        mainView.setElement($('body')).render();
+    });
+</script>
 </body>
 </html>

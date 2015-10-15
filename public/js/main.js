@@ -5,6 +5,7 @@ requirejs.config({
         'jquery': 'jquery',
         'underscore': 'underscore',
         'backbone': 'lib/backbone-min-1.2.3',
+        'bootstrap': 'lib/bootstrap.min',
         'backgrid': 'lib/backgrid.min',
         'backbone.paginator': 'lib/backbone.paginator.min',
         'backgrid-paginator': 'lib/backgrid-paginator.min',
@@ -20,6 +21,9 @@ requirejs.config({
         },
         'backgrid-filter': {
             deps: ['backgrid']
+        },
+        'bootstrap': {
+            deps: ['jquery']
         }
     }
 });

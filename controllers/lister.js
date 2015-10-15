@@ -24,11 +24,11 @@ var buildDescription = function(features, description) {
     var featureList = '';
     description = description || {Content: ''};
     _.each(features, function(feature) {
-       featureList +=  '<li>' + feature + '</li>';
+        featureList +=  '<li>' + feature + '</li>';
     });
     var html = description.Content + '<br><br>' +
-            '<h2>Product Features</h2>' +
-            '<ul>' + featureList + '</ul>';
+        '<h2>Product Features</h2>' +
+        '<ul>' + featureList + '</ul>';
 
     return html;
 };
@@ -37,12 +37,12 @@ var buildItemSpecifics = function(itemAttributes) {
     var keys = ['Brand', 'UPC', 'Color', 'Size'];
     var result = [];
     _.each(keys, function(key) {
-       if (itemAttributes[key]) {
-           result.push({
-               Name: key,
-               Value: itemAttributes[key]
-           });
-       }
+        if (itemAttributes[key]) {
+            result.push({
+                Name: key,
+                Value: itemAttributes[key]
+            });
+        }
     });
 
     return result;
@@ -76,31 +76,10 @@ var mapToEbayKeys = function(listing, amazonAttributes) {
 var startListing = function(user) {
     Listing.find({$and: [{ user_id: user.id}, { status: 'PENDING'}]}, function(err, docs) {
         var MAX_PER_EBAY_CALL = 5;
-        var MAX_PER_AMAZON_CALL = 10;
-        var asinsLists = chunk(_.pluck(docs, 'asin'), MAX_PER_AMAZON_CALL);
+        var asinsLists = _.pluck(docs, 'asin');
 
         var callArray = [];
-        _.each(asinsLists, function(asinsBatch) {
-            callArray.push(function(callback) {
-                amazonProvider.itemLookup(asinsBatch.join(','), function(data) {
-                    callback(null, data);
-                });
-            });
-        });
-
-        async.series(callArray, function(err, result) {
-            if (err) {
-                console.log('Error fetching from Amazon');
-                return;
-            }
-
-            result = _.flatten(result);
-            var allAmazonItems = [];
-            _.each(result, function(responseBatch) {
-                var amazonItems = ensureArray(responseBatch && responseBatch.Items.Item);
-                allAmazonItems = allAmazonItems.concat(amazonItems)
-            });
-
+        amazonProvider.getItemsFromAmazon(asinsLists, function(allAmazonItems) {
             var invalidListings = _.difference(_.pluck(docs, 'asin'), _.pluck(allAmazonItems, 'ASIN'));
             _.each(invalidListings, function(invalidASIN) {
                 var listing  = _.findWhere(docs, {asin: invalidASIN});
@@ -221,54 +200,38 @@ exports.postLister = function(req, res) {
 };
 
 exports.getListings = function(req, res, next) {
-    var userId = req.user.id;
-    Listing.find({ 'user_id': userId }, function (err, docs) {
-        if (err) {
-            next(err);
-        }
+    res.render('listings', {
+        title: 'Listings'
+    });
+};
 
-        res.render('listings', {
-            title: 'Listings',
-            listings: docs
+exports.getSettings = function(req, res, next) {
+    res.render('settings', {
+        title: 'Settings'
+    });
+};
+
+exports.postSettings = function(req, res, next) {
+    req.assert('marginPercent', 'Margin percent can\'t be empty').notEmpty();
+    req.assert('marginMinimum', 'Minimum margin can\'t be empty').notEmpty();
+    req.assert('handelingTime', 'Handeling time can\'t be empty').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {
+        req.flash('errors', errors);
+        return res.redirect('/settings');
+    }
+
+    User.findById(req.user.id, function(err, user) {
+        if (err) return next(err);
+        user.settings.marginPercent = req.body.marginPercent;
+        user.settings.marginMinimum = req.body.marginMinimum;
+        user.settings.handelingTime = req.body.handelingTime;
+        user.save(function(err) {
+            if (err) return next(err);
+            req.flash('success', { msg: 'Settings saved!' });
+            res.render('settings', {
+                title: 'Settings'
+            });
         });
     });
 };
-
-exports.getAmazonListing = function(req, res) {
-    var asin = req.params.asin;
-    var ebayToken = _.findWhere(req.user.get('tokens'), {kind: 'ebay'}).accessToken;
-    amazonProvider.itemLookup(asin, function(data) {
-        var attributes = JSON.parse(data);
-        var ebayListingKeys = {
-            Title: attributes.ItemAttributes.Title.substring(0, 80),
-            Description: attributes.ItemAttributes.Feature.join(' '),
-            StartPrice: '300.0',
-            PictureDetails: {
-                PictureURL: _.pluck(_.pluck(attributes.ImageSets.ImageSet, 'LargeImage'), 'URL')
-            }
-        };
-        if (ebayToken) {
-            ebayProvider.addItem(ebayToken, ebayListingKeys,function(err, data) {
-                res.send(data);
-            });
-        } else {
-            res.send('No ebay access token');
-        }
-    });
-};
-//
-//exports.getAmazonListing = function(req, res) {
-//    var asin = req.params.asin;
-//    var ebayToken = _.findWhere(req.user.get('tokens'), {kind: 'ebay'}).accessToken;
-//    //if (ebayToken) {
-//    //    ebayProvider.addItem(ebayToken, function(err, data) {
-//    //        res.send(data);
-//    //    });
-//    //} else {
-//    //    res.send('No ebay access token');
-//    //}
-//
-//    amazonProvider.itemLookup(asin, function(data) {
-//        res.send(data);
-//    });
-//};
