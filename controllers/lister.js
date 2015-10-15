@@ -228,6 +228,7 @@ exports.postSettings = function(req, res, next) {
         user.settings.handelingTime = req.body.handelingTime;
         user.save(function(err) {
             if (err) return next(err);
+            req.user = user;
             req.flash('success', { msg: 'Settings saved!' });
             res.render('settings', {
                 title: 'Settings'
