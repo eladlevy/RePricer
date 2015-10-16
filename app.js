@@ -121,6 +121,8 @@ app.get('/listings',passportConf.isAuthenticated, listerController.getListings);
 app.get('/settings',passportConf.isAuthenticated, listerController.getSettings);
 app.post('/settings',passportConf.isAuthenticated, listerController.postSettings);
 app.get('/monitor',passportConf.isAuthenticated, monitorController.getMonitor);
+app.get('/revisions',passportConf.isAuthenticated, monitorController.getRevisions);
+app.get('/revisions/:runId',passportConf.isAuthenticated, monitorController.getRevisions);
 app.get('/contact', contactController.getContact);
 app.post('/contact', contactController.postContact);
 app.get('/account', passportConf.isAuthenticated, userController.getAccount);
@@ -130,6 +132,9 @@ app.post('/account/delete', passportConf.isAuthenticated, userController.postDel
 app.get('/account/unlink/:provider', passportConf.isAuthenticated, userController.getOauthUnlink);
 app.get('/api/listings', passportConf.isAuthenticated, apiController.getListings);
 app.get('/api/runs', passportConf.isAuthenticated, apiController.getMonitorRuns);
+app.get('/api/revisions', passportConf.isAuthenticated, apiController.getDefaultRevisions);
+app.get('/api/revisions/:runId', passportConf.isAuthenticated, apiController.getRunRevisions);
+
 //app.get('/api/foursquare', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getFoursquare);
 //app.get('/api/tumblr', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getTumblr);
 //app.get('/api/facebook', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getFacebook);

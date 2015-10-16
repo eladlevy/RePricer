@@ -230,9 +230,7 @@ exports.postSettings = function(req, res, next) {
             if (err) return next(err);
             req.user = user;
             req.flash('success', { msg: 'Settings saved!' });
-            res.render('settings', {
-                title: 'Settings'
-            });
+            res.redirect('/settings');
         });
     });
 };

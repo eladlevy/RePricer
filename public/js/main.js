@@ -9,7 +9,8 @@ requirejs.config({
         'backgrid': 'lib/backgrid.min',
         'backbone.paginator': 'lib/backbone.paginator.min',
         'backgrid-paginator': 'lib/backgrid-paginator.min',
-        'backgrid-filter': 'lib/backgrid-filter.min'
+        'backgrid-filter': 'lib/backgrid-filter.min',
+        'moment': 'lib/moment'
     },
     shim: {
         'backgrid': {

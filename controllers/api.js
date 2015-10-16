@@ -17,3 +17,20 @@ exports.getMonitorRuns = function(req, res) {
     return res.end(JSON.stringify(runs));
   });
 };
+
+exports.getRunRevisions = function(req, res, next) {
+  var runId = req.params.runId;
+  Run.findById(runId).lean().exec(function (err, run) {
+    if(err) return next(err);
+    var revisions = run.revisions;
+    return res.end(JSON.stringify(revisions));
+  });
+};
+
+exports.getDefaultRevisions = function(req, res, next) {
+  Run.findOne({userId: req.user.id}, {}, { sort: { 'created' : -1 } }).lean().exec(function (err, run) {
+    if(err) return next(err);
+    var revisions = run.revisions;
+    return res.end(JSON.stringify(revisions));
+  });
+};

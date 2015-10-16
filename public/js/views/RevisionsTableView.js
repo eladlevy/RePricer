@@ -19,23 +19,25 @@ define([
     backgridFilter,
     moment
 ) {
-    var MonitorTableView = Backbone.View.extend({
+    var RevisionsTableView = Backbone.View.extend({
         events: {
 
         },
 
         initialize: function() {
             var Listing = Backbone.Model.extend({});
-            var Runs = Backbone.PageableCollection.extend({
+            var path = window.location.pathname.split('/');
+            var runId = (path.length > 2) ? path[path.length -1] : '';
+            var Revisions = Backbone.PageableCollection.extend({
                 model: Listing,
-                url: "/api/runs",
+                url: "/api/revisions/" + runId,
                 state: {
                     pageSize: 15
                 },
                 mode: 'client'
             });
 
-            var runs = new Runs();
+            var revisions = new Revisions();
             var columns = [{
                 name: "",
                 label: "",
@@ -47,52 +49,49 @@ define([
                     }
                 })
             },{
-                name: "created",
-                label: "Run Date",
-                direction: "descending",
-                editable: false,
+                name: "itemId",
+                label: "Ebay Id",
                 cell: Backgrid.Cell.extend({
                     render: function () {
-                        this.$el.text(moment(this.model.get('created')).format('MMMM Do YYYY, h:mm:ss a'));
+                        var ebayUrl = 'https://www.ebay.com/itm/' + this.model.get('itemId');
+                        var anchor = '<a href="' + ebayUrl + '" target="_blank">' + this.model.get('itemId') +'</a>';
+                        this.$el.html(anchor);
                         return this;
                     }
-                })
-            },{
-                name: "listings",
-                label: "Listings",
-                cell: "string",
+                }),
                 editable: false
             },{
-                name: "revisions",
-                label: "Revisions",
+                name: "asin",
+                label: "ASIN",
                 editable: false,
-                cell: Backgrid.Cell.extend({
-                    render: function () {
-                        var a = '<a href="revisions/' + this.model.get('_id') +'">' + this.model.get('revisions').length +'</a>';
-                        this.$el.html(a);
-                        return this;
-                    }
-                })
+                cell: 'string'
             },{
-                name: "errors",
-                label: "Errors",
+                name: "oldPrice",
+                label: "Old Price",
                 editable: false,
-                cell: Backgrid.Cell.extend({
-                    render: function () {
-                        this.$el.text(this.model.get('ebayErrors').length);
-                        return this;
-                    }
-                })
-            }];
+                cell: 'string'
+            },{
+                name: "newPrice",
+                label: "New Price",
+                editable: false,
+                cell: 'string'
+            },
+                {
+                name: "quantity",
+                label: "Quantity",
+                editable: false,
+                cell: 'string'
+            }
+            ];
 
             // Initialize a new Grid instance
             this.grid = new Backgrid.Grid({
                 columns: columns,
-                collection: runs
+                collection: revisions
             });
 
             this.paginator = new Backgrid.Extension.Paginator({
-                collection: runs
+                collection: revisions
             });
 
             //this.filter = new Backgrid.Extension.ClientSideFilter({
@@ -101,17 +100,15 @@ define([
             //    placeholder: 'Type asin'
             //});
 
-            runs.fetch();
+            revisions.fetch();
         },
 
         render: function() {
-            this.grid.render().sort("created", "descending");
+            this.grid.render();
             this.$(".table-holder").append(this.grid.el);
             this.$(".table-holder").after(this.paginator.render().el);
-            //this.$('.table-holder').before(this.filter.render().el);
-            //$(this.filter.el).css({float: "right", margin: "20px", 'margin-top': 0});
         }
     });
 
-    return MonitorTableView;
+    return RevisionsTableView;
 });
