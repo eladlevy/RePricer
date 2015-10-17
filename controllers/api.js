@@ -13,7 +13,7 @@ exports.getListings = function(req, res) {
 
 exports.getMonitorRuns = function(req, res) {
   var userId = req.user.id;
-  Run.find({ 'userId': userId }).limit(25).lean().exec(function (err, runs) {
+  Run.find({ 'userId': userId }).sort({ 'created' : -1 }).limit(25).lean().exec(function (err, runs) {
     return res.end(JSON.stringify(runs));
   });
 };
