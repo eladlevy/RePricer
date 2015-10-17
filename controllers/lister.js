@@ -134,6 +134,7 @@ var startListing = function(user) {
                     }
                     result = _.flatten(result);
                     _.each(result, function(responseBatch) {
+                        if (!responseBatch) return;
                         responseBatch.AddItemResponseContainer = ensureArray(responseBatch.AddItemResponseContainer);
                         _.each(responseBatch.AddItemResponseContainer, function(itemResponse) {
                             itemResponse.Errors = ensureArray(itemResponse.Errors);
