@@ -212,6 +212,26 @@ exports.getSettings = function(req, res, next) {
     });
 };
 
+exports.postRelist = function(req, res, next) {
+    req.assert('listingId', 'Margin percent can\'t be empty').notEmpty();
+    var errors = req.validationErrors();
+    if (errors) {
+        req.flash('errors', errors);
+        return res.redirect('/listings');
+    }
+
+    Listing.findById(req.body.listingId, function(err, listing) {
+        if (err) return next(err);
+        listing.status = 'PENDING';
+        listing.save(function(err) {
+            if (err) return next(err);
+            req.flash('success', { msg: 'Item pending to be listed' });
+            res.redirect('/listings');
+            startListing(req.user);
+        });
+    });
+};
+
 exports.postSettings = function(req, res, next) {
     req.assert('marginPercent', 'Margin percent can\'t be empty').notEmpty();
     req.assert('marginMinimum', 'Minimum margin can\'t be empty').notEmpty();

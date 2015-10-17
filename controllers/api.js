@@ -6,14 +6,14 @@ var querystring = require('querystring');
 
 exports.getListings = function(req, res) {
   var userId = req.user.id;
-  Listing.find({ 'user_id': userId }).lean().exec(function (err, listings) {
+  Listing.find({$and: [{ 'user_id': userId }, {status: {$not: { $eq: 'INVALID_ASIN' }}}]}).lean().exec(function (err, listings) {
     return res.end(JSON.stringify(listings));
   });
 };
 
 exports.getMonitorRuns = function(req, res) {
   var userId = req.user.id;
-  Run.find({ 'userId': userId }).lean().exec(function (err, runs) {
+  Run.find({ 'userId': userId }).limit(25).lean().exec(function (err, runs) {
     return res.end(JSON.stringify(runs));
   });
 };

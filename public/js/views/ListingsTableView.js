@@ -58,9 +58,6 @@ define([
                 name: "status",
                 label: "Status",
                 editable: false,
-                enterEditMode: function(){
-                    debugger;
-                },
                 cell: "string"
             },{
                 name: "asin",
@@ -83,7 +80,22 @@ define([
                         return this;
                     }
                 })
-            }];
+            },{
+                name: "",
+                label: "Actions",
+                editable: false,
+                cell: Backgrid.Cell.extend({
+                    render: function () {
+                        if (this.model.get('status') !== 'LISTED') {
+                            var form = '<form role="form" method="POST"><input class="hide" name="listingId" id="listingId" value="' + this.model.get('_id') +'">' +
+                                '<button type="submit" class="btn btn-sm btn-default">Re-list</button>' +
+                                '</form>';
+                            this.$el.html(form);
+                        }
+                        return this;
+                    }
+                })
+            },];
 
             // Initialize a new Grid instance
             this.grid = new Backgrid.Grid({
