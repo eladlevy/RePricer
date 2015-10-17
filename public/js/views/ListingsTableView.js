@@ -37,6 +37,7 @@ define([
             var columns = [{
                 name: "",
                 label: "",
+                editable: false,
                 cell: Backgrid.Cell.extend({
                     render: function () {
                         this.$el.text(this.model.collection.indexOf(this.model) + 1);
@@ -46,6 +47,7 @@ define([
             },{
                 name: "data.Title",
                 label: "Name",
+                editable: false,
                 cell: Backgrid.Cell.extend({
                     render: function(){
                         this.$el.text(this.model.get('data').Title);
@@ -55,15 +57,32 @@ define([
             },{
                 name: "status",
                 label: "Status",
+                editable: false,
+                enterEditMode: function(){
+                    debugger;
+                },
                 cell: "string"
             },{
                 name: "asin",
                 label: "ASIN",
+                editable: false,
                 cell: "string"
             }, {
                 name: "itemId",
                 label: "Ebay Id",
-                cell: "string" // A cell type for floating point value, defaults to have a precision 2 decimal numbers
+                editable: false,
+                cell: Backgrid.Cell.extend({
+                    render: function () {
+                        if (!this.model.get('itemId')) {
+                            this.$el.text('N/A');
+                            return this;
+                        }
+                        var ebayUrl = 'https://www.ebay.com/itm/' + this.model.get('itemId');
+                        var anchor = '<a href="' + ebayUrl + '" target="_blank">' + this.model.get('itemId') +'</a>';
+                        this.$el.html(anchor);
+                        return this;
+                    }
+                })
             }];
 
             // Initialize a new Grid instance

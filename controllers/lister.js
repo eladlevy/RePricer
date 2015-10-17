@@ -61,6 +61,7 @@ var mapToEbayKeys = function(listing, amazonAttributes) {
         //Quantity: amazonAttributes.ItemAttributes.PackageQuantity,
         Description: buildDescription(amazonAttributes.ItemAttributes.Feature, description),
         StartPrice: '300.0',
+        Quantity: '0',
         PictureDetails: {
             PictureURL: _.pluck(_.pluck(amazonAttributes.ImageSets.ImageSet.slice(0, MAX_IMAGES_LIMIT), 'LargeImage'), 'URL')
         },
@@ -69,8 +70,7 @@ var mapToEbayKeys = function(listing, amazonAttributes) {
         },
         PrimaryCategory: {CategoryID: amazonAttributes.categoryId || '377'}
     };
-
-    listing.data = _.extend(listing.data, data);
+    listing.data = _.defaults(data, listing.toObject().data || {});
 };
 
 var startListing = function(user) {
