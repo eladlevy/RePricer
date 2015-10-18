@@ -17,7 +17,6 @@ define([
 ) {
     var MainView = Backbone.View.extend({
         events: {
-
         },
 
         initialize: function() {
@@ -38,6 +37,7 @@ define([
                 this.revisionsTableView = new RevisionsTableView({el: $('.revisions-table-holder')});
                 this.revisionsTableView.render();
             }
+            return this;
         }
     });
 

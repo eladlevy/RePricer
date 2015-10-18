@@ -236,6 +236,8 @@ exports.postSettings = function(req, res, next) {
     req.assert('marginPercent', 'Margin percent can\'t be empty').notEmpty();
     req.assert('marginMinimum', 'Minimum margin can\'t be empty').notEmpty();
     req.assert('handelingTime', 'Handeling time can\'t be empty').notEmpty();
+    req.assert('itemQuantity', 'Item quantity time can\'t be empty').notEmpty();
+
     var errors = req.validationErrors();
     if (errors) {
         req.flash('errors', errors);
@@ -247,6 +249,7 @@ exports.postSettings = function(req, res, next) {
         user.settings.marginPercent = req.body.marginPercent;
         user.settings.marginMinimum = req.body.marginMinimum;
         user.settings.handelingTime = req.body.handelingTime;
+        user.settings.itemQuantity = req.body.itemQuantity;
         user.save(function(err) {
             if (err) return next(err);
             req.user = user;
