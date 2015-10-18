@@ -81,6 +81,12 @@ define([
                 label: "Quantity",
                 editable: false,
                 cell: 'string'
+            },
+            {
+                name: "action",
+                label: "Action",
+                editable: false,
+                cell: 'string'
             }
             ];
 

@@ -6,6 +6,7 @@ var listingSchema = new mongoose.Schema({
   user_id: String,
   status: String,
   ebayErrors: Array,
+  lastRevisionAction: { type: String, default: '' },
 
   data: {
     Title: { type: String, default: '' },
