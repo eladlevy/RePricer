@@ -109,8 +109,8 @@ define([
 
             this.filter = new Backgrid.Extension.ClientSideFilter({
                 collection: listings,
-                fields: ['asin'],
-                placeholder: 'Type asin'
+                fields: ['asin', 'itemId'],
+                placeholder: 'Asin or item id'
             });
 
             listings.fetch();
