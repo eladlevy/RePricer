@@ -93,6 +93,7 @@ app.use(session({
   resave: true,
   saveUninitialized: true,
   secret: secrets.sessionSecret,
+  cookie : { httpOnly: true, maxAge: 2147483647  },
   store: new MongoStore({ url: secrets.db, autoReconnect: true })
 }));
 app.use(passport.initialize());
