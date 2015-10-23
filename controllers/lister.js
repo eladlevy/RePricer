@@ -5,8 +5,14 @@ var async = require('async');
 var amazonProvider = require('../lib/amazonApiProvider');
 var ebayProvider = require('../lib/ebayApiProvider');
 var querystring = require('querystring');
+var hbs = require('express-handlebars').create();
 var request = require('request');
 var _ = require('underscore');
+
+var descriptionTemplate;
+hbs.getPartials().then(function (partials) {
+    descriptionTemplate = partials.listingDescription;
+});
 
 var chunk = function(arr, chunkSize) {
     arr = arr || [];
@@ -20,17 +26,14 @@ var ensureArray = function(obj) {
     return _.isUndefined(obj) ? [] : (_.isArray(obj) ? obj : [ obj ]);
 };
 
-var buildDescription = function(features, description) {
-    var featureList = '';
+var buildDescription = function(features, description, title, images) {
+    var ctx = {};
     description = description || {Content: ''};
-    _.each(features, function(feature) {
-        featureList +=  '<li>' + feature + '</li>';
-    });
-    var html = description.Content + '<br><br>' +
-        '<h2>Product Features</h2>' +
-        '<ul>' + featureList + '</ul>';
-
-    return html;
+    ctx.title = title;
+    ctx.features = ensureArray(features);
+    ctx.description = description.Content;
+    ctx.image = images[0];
+    return descriptionTemplate(ctx);
 };
 
 var buildItemSpecifics = function(itemAttributes) {
@@ -56,14 +59,16 @@ var mapToEbayKeys = function(listing, amazonAttributes) {
     amazonAttributes.EditorialReviews = amazonAttributes.EditorialReviews || {};
     amazonAttributes.EditorialReviews.EditorialReview = ensureArray(amazonAttributes.EditorialReviews.EditorialReview);
     var description = _.findWhere(amazonAttributes.EditorialReviews.EditorialReview, {Source: 'Product Description'});
+    var title = amazonAttributes.ItemAttributes.Title.substring(0, MAX_TITLE_LIMIT);
+    var images = _.pluck(_.pluck(amazonAttributes.ImageSets.ImageSet.slice(0, MAX_IMAGES_LIMIT), 'LargeImage'), 'URL').reverse();
     var data = {
-        Title: amazonAttributes.ItemAttributes.Title.substring(0, MAX_TITLE_LIMIT),
+        Title: title,
         //Quantity: amazonAttributes.ItemAttributes.PackageQuantity,
-        Description: buildDescription(amazonAttributes.ItemAttributes.Feature, description),
+        Description: buildDescription(amazonAttributes.ItemAttributes.Feature, description, title, images),
         StartPrice: '300.0',
         Quantity: '0',
         PictureDetails: {
-            PictureURL: _.pluck(_.pluck(amazonAttributes.ImageSets.ImageSet.slice(0, MAX_IMAGES_LIMIT), 'LargeImage'), 'URL')
+            PictureURL: images
         },
         ItemSpecifics:{
             NameValueList: buildItemSpecifics(amazonAttributes.ItemAttributes)

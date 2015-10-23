@@ -1,0 +1,70 @@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,600">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style>
+    body {
+        font-family: "Source Sans Pro", sans-serif;
+    }
+
+    .images img {
+        max-width: 400px;
+    }
+
+    .padding-top {
+        padding-top: 24px;
+    }
+
+    .col-xs-4 {
+        float: left;
+        width: 36%;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .col-xs-6 {
+        float: left;
+        width: 54%;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .col-xs-12 {
+        float: left;
+        width: 100%;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .main-img {
+        width: 100%;
+    }
+
+</style>
+<h1 class="col-xs-12">{{title}}</h1>
+<div>
+    <div class="col-xs-4 padding-top">
+        <img class="main-img" src="{{image}}">
+    </div>
+    <div class="col-xs-6">
+        {{#if description}}
+            <h2>Product Description</h2>
+            {{description}}
+        {{/if}}
+        <h2>Product Features</h2>
+        <ul>
+            {{#each features}}
+                <li>{{this}}</li>
+            {{/each}}
+        </ul>
+    </div>
+    <div class="col-xs-12">
+        <h2>Shipping</h2>
+        <ul>
+            <li>All items ship within 72 hours of Payment with tracking number.</li>
+        </ul>
+        <h2>Returns</h2>
+        <ul>
+            <li>Returns are accepted within 14 days.</li>
+            <li>The buyer pays shipping fees.</li>
+        </ul>
+    </div>
+</div>
