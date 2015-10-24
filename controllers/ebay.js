@@ -19,7 +19,6 @@ exports.authenticate = function(req, res) {
 exports.handleSuccess = function(req, res, next) {
     ebayApi.getToken(req.cookies.ebaySessionId, function(err, data) {
         if (err) return next(err);
-        console.log(data);
         var accessToken = data.eBayAuthToken;
         ebayApi.getUser(accessToken, function(err, data) {
             var userId = data.User.UserID;
