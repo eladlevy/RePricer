@@ -33,6 +33,7 @@
     "sendgrid": "~0.4.6",
     "serve-favicon": "^2.3.0",
     "underscore": "^1.8.3",
+    "x-ray": "^2.0.2",
     "xml2js": "^0.4.12"
   }
 }
