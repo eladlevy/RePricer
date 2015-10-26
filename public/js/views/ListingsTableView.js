@@ -81,6 +81,16 @@ define([
                     }
                 })
             },{
+                name: "data.Quantity",
+                label: "Quantity",
+                editable: false,
+                cell: Backgrid.Cell.extend({
+                    render: function(){
+                        this.$el.text(this.model.get('data').Quantity);
+                        return this;
+                    }
+                })
+            },{
                 name: "",
                 label: "Actions",
                 editable: false,
@@ -95,7 +105,7 @@ define([
                         return this;
                     }
                 })
-            },];
+            }];
 
             // Initialize a new Grid instance
             this.grid = new Backgrid.Grid({
