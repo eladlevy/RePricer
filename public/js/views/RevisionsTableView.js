@@ -64,7 +64,14 @@ define([
                 name: "asin",
                 label: "ASIN",
                 editable: false,
-                cell: 'string'
+                cell: Backgrid.Cell.extend({
+                    render: function () {
+                        var amazonUrl = 'https://www.amzn.com/' + this.model.get('asin');
+                        var anchor = '<a href="' + amazonUrl + '" target="_blank">' + this.model.get('asin') +'</a>';
+                        this.$el.html(anchor);
+                        return this;
+                    }
+                }),
             },{
                 name: "oldPrice",
                 label: "Old Price",
