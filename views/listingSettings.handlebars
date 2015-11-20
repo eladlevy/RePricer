@@ -1,0 +1,33 @@
+<div class="row">
+    <h3 class="col-xs-12">Listing Settings - {{listing.data.Title}}</h3>
+    <h5 class="col-xs-12">ASIN: <a target="_blank" href="https://www.amzn.com/{{listing.asin}}">{{listing.asin}}</a></h5>
+    <h5 class="col-xs-12">Ebay ID: <a target="_blank" href="https://www.ebay.com/itm/{{listing.itemId}}">{{listing.itemId}}</a></h5>
+    <form role="form" method="POST">
+        <div class="form-inline col-xs-12 margin-bottom-sm">
+            <div class="form-group">
+                <div>
+                    <label for="marginPercent">I want to make </label>
+                    <input type="number" min="0" step="any" name="marginPercent" class="form-control" id="marginPercent" value="{{listing.settings.marginPercent}}" placeholder="i.e 15">
+                    <label for="marginPercent">% profit on each sale. </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-inline col-xs-12 margin-bottom-sm">
+            <div class="form-group">
+                <label for="marginMinimum">I want to make at least</label>
+                <input type="number" min="0" step="any" class="form-control" name="marginMinimum" id="marginMinimum" value="{{listing.settings.marginMinimum}}" placeholder="i.e 1.5">
+                <label for="marginMinimum">$ on each sale.</label>
+            </div>
+        </div>
+        <div class="form-inline col-xs-12 margin-bottom-sm">
+            <div class="form-group">
+                <label for="handelingTime">Default item quantity is </label>
+                <input type="number" min="0" class="form-control" id="itemQuantity" name="itemQuantity" value="{{listing.settings.itemQuantity}}" placeholder="i.e 1">
+                <label for="handelingTime">. We will update the quantity on each monitor run.</label>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <button type="submit" class="btn btn-default">Save</button>
+        </div>
+    </form>
+</div>

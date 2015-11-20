@@ -31,7 +31,7 @@ var buildDescription = function(features, description, title, images) {
     description = description || {Content: ''};
     ctx.title = title;
     ctx.features = ensureArray(features);
-    ctx.description = description.Content;
+    ctx.description = description.Content.replace(/<(?:.|\n)*?>/gm, '');
     ctx.image = images[0];
     return descriptionTemplate(ctx);
 };
@@ -216,6 +216,45 @@ exports.getSettings = function(req, res, next) {
         title: 'Settings'
     });
 };
+
+exports.getListingSettings = function(req, res, next) {
+    var listingId = req.params.listingId;
+    Listing.findById(listingId, function(err, listing) {
+        if (err) return next(err);
+        var listingObj = listing.toObject();
+        listingObj.settings = _.defaults(listingObj.settings, req.user.toObject().settings);
+        res.render('listingSettings', {
+            title: 'Listing Settings',
+            listing: listingObj
+        });
+    });
+};
+
+exports.postListingSettings = function(req, res, next) {
+    req.assert('marginPercent', 'Margin percent can\'t be empty').notEmpty();
+    req.assert('marginMinimum', 'Minimum margin can\'t be empty').notEmpty();
+    req.assert('itemQuantity', 'Item quantity time can\'t be empty').notEmpty();
+    var listingId = req.params.listingId;
+
+    var errors = req.validationErrors();
+    if (errors) {
+        req.flash('errors', errors);
+        return res.redirect('/listings/' + listingId);
+    }
+
+    Listing.findById(listingId, function(err, listing) {
+        if (err) return next(err);
+        listing.settings.marginPercent = req.body.marginPercent;
+        listing.settings.marginMinimum = req.body.marginMinimum;
+        listing.settings.itemQuantity = req.body.itemQuantity;
+        listing.save(function(err) {
+            if (err) return next(err);
+            req.flash('success', { msg: 'Listing settings saved!' });
+            res.redirect('/listings/' + listingId);
+        });
+    });
+};
+
 
 exports.postRelist = function(req, res, next) {
     req.assert('listingId', 'Margin percent can\'t be empty').notEmpty();

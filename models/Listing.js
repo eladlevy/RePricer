@@ -7,6 +7,14 @@ var listingSchema = new mongoose.Schema({
   status: String,
   ebayErrors: Array,
   lastRevisionAction: { type: String, default: '' },
+  settings: {
+    marginPercent: { type: Number },
+    marginMinimum: { type: Number },
+    handelingTime: { type: Number },
+    itemQuantity: { type: Number },
+    mininumQuantity: { type: Number },
+    returnPolicy: { type: String }
+  },
 
   data: {
     Title: { type: String, default: '' },

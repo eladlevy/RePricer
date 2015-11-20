@@ -120,6 +120,8 @@ app.get('/lister',passportConf.isAuthenticated, listerController.getLister);
 app.post('/lister',passportConf.isAuthenticated, listerController.postLister);
 app.get('/listings',passportConf.isAuthenticated, listerController.getListings);
 app.post('/listings',passportConf.isAuthenticated, listerController.postRelist);
+app.get('/listings/:listingId',passportConf.isAuthenticated, listerController.getListingSettings);
+app.post('/listings/:listingId',passportConf.isAuthenticated, listerController.postListingSettings);
 app.get('/settings',passportConf.isAuthenticated, listerController.getSettings);
 app.post('/settings',passportConf.isAuthenticated, listerController.postSettings);
 app.get('/monitor',passportConf.isAuthenticated, monitorController.getMonitor);
