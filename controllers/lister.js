@@ -222,7 +222,7 @@ exports.getListingSettings = function(req, res, next) {
     Listing.findById(listingId, function(err, listing) {
         if (err) return next(err);
         var listingObj = listing.toObject();
-        listingObj.settings = _.defaults(listingObj.settings, req.user.toObject().settings);
+        listingObj.settings = _.defaults(listingObj.settings || {}, req.user.toObject().settings);
         res.render('listingSettings', {
             title: 'Listing Settings',
             listing: listingObj
