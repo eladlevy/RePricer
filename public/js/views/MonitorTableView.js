@@ -30,7 +30,7 @@ define([
                 model: Listing,
                 url: "/api/runs",
                 state: {
-                    pageSize: 15
+                    pageSize: 50
                 },
                 mode: 'client'
             });

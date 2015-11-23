@@ -28,7 +28,7 @@ define([
                 model: Listing,
                 url: "api/listings",
                 state: {
-                    pageSize: 15
+                    pageSize: 50
                 },
                 mode: 'client'
             });
