@@ -96,7 +96,7 @@ var startListing = function(user) {
             var ebayToken = _.findWhere(user.get('tokens'), {kind: 'ebay'}).accessToken;
             _.each(allAmazonItems, function(item) {
                 callArray.push(function(callback) {
-                    var query;
+                    var query;;
                     if (item.BrowseNodes) {
                         item.BrowseNodes.BrowseNode = ensureArray(item.BrowseNodes.BrowseNode);
                         query = item.BrowseNodes.BrowseNode[0].Name + ' ';
