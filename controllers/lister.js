@@ -80,6 +80,10 @@ var mapToEbayKeys = function(listing, amazonAttributes) {
 
 var startListing = function(user) {
     Listing.find({$and: [{ user_id: user.id}, { status: 'PENDING'}]}, function(err, docs) {
+        _.each(docs, function(listing) {
+            listing.status = 'PROCESSING';
+            listing.save();
+        });
         var MAX_PER_EBAY_CALL = 5;
         var asinsLists = _.pluck(docs, 'asin');
 
@@ -126,7 +130,7 @@ var startListing = function(user) {
                     mapToEbayKeys(listing, item);
                 });
 
-                var itemsList = chunk(_.where(docs, {status: 'PENDING'}), MAX_PER_EBAY_CALL);
+                var itemsList = chunk(_.where(docs, {status: 'PROCESSING'}), MAX_PER_EBAY_CALL);
 
                 callArray = [];
                 _.each(itemsList, function(itemsBatch) {
