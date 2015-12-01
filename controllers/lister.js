@@ -78,42 +78,61 @@ var mapToEbayKeys = function(listing, amazonAttributes) {
     listing.data = _.defaults(data, listing.toObject().data || {});
 };
 
-var startListing = function(user) {
-    Listing.find({$and: [{ user_id: user.id}, { status: 'PENDING'}]}, function(err, docs) {
-        _.each(docs, function(listing) {
-            listing.status = 'PROCESSING';
-            listing.save();
-        });
-        var MAX_PER_EBAY_CALL = 5;
-        var asinsLists = _.pluck(docs, 'asin');
+var startListing = function(user, docs) {
+    if (_.isEmpty(docs)) return;
+    var MAX_PER_EBAY_CALL = 5;
+    var asinsLists = _.pluck(docs, 'asin');
 
-        var callArray = [];
-        amazonProvider.getItemsFromAmazon(asinsLists, function(allAmazonItems) {
-            var invalidListings = _.difference(_.pluck(docs, 'asin'), _.pluck(allAmazonItems, 'ASIN'));
-            _.each(invalidListings, function(invalidASIN) {
-                var listing  = _.findWhere(docs, {asin: invalidASIN});
-                listing.status = 'INVALID_ASIN';
+    var callArray = [];
+    amazonProvider.getItemsFromAmazon(asinsLists, function(allAmazonItems) {
+        var invalidListings = _.difference(_.pluck(docs, 'asin'), _.pluck(allAmazonItems, 'ASIN'));
+        _.each(invalidListings, function(invalidASIN) {
+            var listing  = _.findWhere(docs, {asin: invalidASIN});
+            listing.status = 'INVALID_ASIN';
+            listing.remove();
+        });
+
+        //Find categories
+        callArray = [];
+        var ebayToken = _.findWhere(user.get('tokens'), {kind: 'ebay'}).accessToken;
+        _.each(allAmazonItems, function(item) {
+            callArray.push(function(callback) {
+                var query;
+                if (item.BrowseNodes) {
+                    item.BrowseNodes.BrowseNode = ensureArray(item.BrowseNodes.BrowseNode);
+                    query = item.BrowseNodes.BrowseNode[0].Name + ' ';
+                }
+
+                query += item.ItemAttributes.Title;
+                ebayProvider.findCategory(ebayToken, query, function(err, data) {
+                    var categoryId;
+                    if (data.CategoryCount > 0) {
+                        data.SuggestedCategoryArray.SuggestedCategory = ensureArray(data.SuggestedCategoryArray.SuggestedCategory);
+                        categoryId = data.SuggestedCategoryArray.SuggestedCategory[0].Category.CategoryID;
+                        item.categoryId = categoryId;
+                    }
+                    callback(null, data);
+                });
+            });
+        });
+
+        async.parallel(callArray, function(err, result) {
+            if (err) {
+                console.log('Error finding category');
+                return;
+            }
+
+            _.each(allAmazonItems, function(item) {
+                var listing  = _.findWhere(docs, {asin: item.ASIN});
+                mapToEbayKeys(listing, item);
             });
 
-            //Find categories
-            callArray = [];
-            var ebayToken = _.findWhere(user.get('tokens'), {kind: 'ebay'}).accessToken;
-            _.each(allAmazonItems, function(item) {
-                callArray.push(function(callback) {
-                    var query;
-                    if (item.BrowseNodes) {
-                        item.BrowseNodes.BrowseNode = ensureArray(item.BrowseNodes.BrowseNode);
-                        query = item.BrowseNodes.BrowseNode[0].Name + ' ';
-                    }
+            var itemsList = chunk(_.where(docs, {status: 'PENDING'}), MAX_PER_EBAY_CALL);
 
-                    query += item.ItemAttributes.Title;
-                    ebayProvider.findCategory(ebayToken, query, function(err, data) {
-                        var categoryId;
-                        if (data.CategoryCount > 0) {
-                            data.SuggestedCategoryArray.SuggestedCategory = ensureArray(data.SuggestedCategoryArray.SuggestedCategory);
-                            categoryId = data.SuggestedCategoryArray.SuggestedCategory[0].Category.CategoryID;
-                            item.categoryId = categoryId;
-                        }
+            callArray = [];
+            _.each(itemsList, function(itemsBatch) {
+                callArray.push(function(callback) {
+                    ebayProvider.addItems(ebayToken, itemsBatch,function(err, data) {
                         callback(null, data);
                     });
                 });
@@ -121,56 +140,36 @@ var startListing = function(user) {
 
             async.parallel(callArray, function(err, result) {
                 if (err) {
-                    console.log('Error finding category');
+                    console.log('Error listing in Ebay');
                     return;
                 }
-
-                _.each(allAmazonItems, function(item) {
-                    var listing  = _.findWhere(docs, {asin: item.ASIN});
-                    mapToEbayKeys(listing, item);
-                });
-
-                var itemsList = chunk(_.where(docs, {status: 'PROCESSING'}), MAX_PER_EBAY_CALL);
-
-                callArray = [];
-                _.each(itemsList, function(itemsBatch) {
-                    callArray.push(function(callback) {
-                        ebayProvider.addItems(ebayToken, itemsBatch,function(err, data) {
-                            callback(null, data);
+                result = _.flatten(result);
+                _.each(result, function(responseBatch) {
+                    if (!responseBatch) return;
+                    responseBatch.AddItemResponseContainer = ensureArray(responseBatch.AddItemResponseContainer);
+                    _.each(responseBatch.AddItemResponseContainer, function(itemResponse) {
+                        itemResponse.Errors = ensureArray(itemResponse.Errors);
+                        var errors = _.where(itemResponse.Errors, {SeverityCode: 'Error'});
+                        errors = _.map(errors, function(currentObject) {
+                            return _.pick(currentObject, 'ErrorCode', 'ShortMessage');
                         });
+                        var listing = _.findWhere(docs, {id: itemResponse.CorrelationID});
+                        if (!_.isEmpty(errors)) {
+                            listing.ebayErrors = errors;
+                            listing.status = 'LISTING_ERROR';
+                            listing.remove();
+                            console.error('Error listing on Ebay for asin:' + listing.asin + ' Error:');
+                            console.error(JSON.stringify(errors));
+                        } else {
+                            listing.itemId = itemResponse.ItemID;
+                            listing.status = 'LISTED';
+                        }
                     });
                 });
 
-                async.parallel(callArray, function(err, result) {
-                    if (err) {
-                        console.log('Error listing in Ebay');
-                        return;
-                    }
-                    result = _.flatten(result);
-                    _.each(result, function(responseBatch) {
-                        if (!responseBatch) return;
-                        responseBatch.AddItemResponseContainer = ensureArray(responseBatch.AddItemResponseContainer);
-                        _.each(responseBatch.AddItemResponseContainer, function(itemResponse) {
-                            itemResponse.Errors = ensureArray(itemResponse.Errors);
-                            var errors = _.where(itemResponse.Errors, {SeverityCode: 'Error'});
-                            errors = _.map(errors, function(currentObject) {
-                                return _.pick(currentObject, 'ErrorCode', 'ShortMessage');
-                            });
-                            var listing = _.findWhere(docs, {id: itemResponse.CorrelationID});
-                            if (!_.isEmpty(errors)) {
-                                listing.ebayErrors = errors;
-                                listing.status = 'LISTING_ERROR';
-                            } else {
-                                listing.itemId = itemResponse.ItemID;
-                                listing.status = 'LISTED';
-                            }
-                        });
-                    });
-
-                    _.each(docs, function(listing) {
-                        listing.save(function(err) {
-                            console.log(err);
-                        });
+                _.each(docs, function(listing) {
+                    listing.save(function(err) {
+                        console.log(err);
                     });
                 });
             });
@@ -206,8 +205,8 @@ exports.postLister = function(req, res) {
     });
 
     Listing.create(listings, function(err, listingItems) {
-        startListing(req.user);
-        req.flash('success', { msg: asinsArray.length + ' items queued for listing!' });
+        startListing(req.user, listingItems);
+        req.flash('success', { msg: listingItems.length + ' items queued for listing!' });
         res.render('lister', {
             title: 'Lister'
         });
@@ -275,13 +274,19 @@ exports.postRelist = function(req, res, next) {
 
     Listing.findById(req.body.listingId, function(err, listing) {
         if (err) return next(err);
-        listing.status = 'PENDING';
-        listing.save(function(err) {
-            if (err) return next(err);
-            req.flash('success', { msg: 'Item pending to be listed' });
+        if (listing) {
+            listing.status = 'PENDING';
+            listing.save(function(err, savedListing) {
+                if (err) return next(err);
+                req.flash('success', { msg: 'Item pending to be listed' });
+                res.redirect('/listings');
+                startListing(req.user, [savedListing]);
+            });
+        } else {
+            req.flash('errors', { msg: 'Item does not exists anymore' });
             res.redirect('/listings');
-            startListing(req.user);
-        });
+        }
+
     });
 };
 
