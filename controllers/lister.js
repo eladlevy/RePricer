@@ -106,6 +106,7 @@ var startListing = function(user, docs) {
                 query += item.ItemAttributes.Title;
                 ebayProvider.findCategory(ebayToken, query, function(err, data) {
                     var categoryId;
+                    data = data || {};
                     if (data.CategoryCount > 0) {
                         data.SuggestedCategoryArray.SuggestedCategory = ensureArray(data.SuggestedCategoryArray.SuggestedCategory);
                         categoryId = data.SuggestedCategoryArray.SuggestedCategory[0].Category.CategoryID;
