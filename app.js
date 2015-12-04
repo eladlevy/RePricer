@@ -83,7 +83,7 @@ app.use(require('connect-assets')({
 }));
 app.use(compress());
 app.use(favicon(path.join(__dirname, 'public/favicon.png')));
-app.use(logger('dev'));
+app.use(logger('common'));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));

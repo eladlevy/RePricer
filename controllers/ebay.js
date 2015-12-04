@@ -6,7 +6,7 @@ var parseXML = require('xml2js').parseString;
 var _ = require('underscore');
 
 
-exports.authenticate = function(req, res) {
+exports.authenticate = function(req, res, next) {
     ebayApi.getSessionId(function(err, data) {
         if (err) return next(err);
         var sessionId = data.SessionID;
