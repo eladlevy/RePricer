@@ -32,6 +32,7 @@ var contactController = require('./controllers/contact');
 var ebayController = require('./controllers/ebay');
 var listerController = require('./controllers/lister');
 var monitorController = require('./controllers/monitor');
+var adminController = require('./controllers/admin');
 
 /**
  * API keys + Passport configuration.
@@ -138,6 +139,7 @@ app.get('/api/listings', passportConf.isAuthenticated, apiController.getListings
 app.get('/api/runs', passportConf.isAuthenticated, apiController.getMonitorRuns);
 app.get('/api/revisions', passportConf.isAuthenticated, apiController.getDefaultRevisions);
 app.get('/api/revisions/:runId', passportConf.isAuthenticated, apiController.getRunRevisions);
+app.get('/admin/login/:userId', passportConf.isAuthenticated, adminController.logInAs);
 
 //app.get('/api/foursquare', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getFoursquare);
 //app.get('/api/tumblr', passportConf.isAuthenticated, passportConf.isAuthorized, apiController.getTumblr);

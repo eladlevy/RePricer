@@ -5,6 +5,7 @@ var userSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   password: String,
   active: { type: Boolean, default: true },
+  admin: { type: Boolean, default: false },
 
   facebook: { type: String, unique: true, sparse: true },
   twitter: { type: String, unique: true, sparse: true },
