@@ -6,7 +6,12 @@ var querystring = require('querystring');
 
 exports.getListings = function(req, res) {
   var userId = req.user.id;
-  Listing.find({$and: [{ 'user_id': userId }, {status: {$not: { $eq: 'INVALID_ASIN' }}}]}).lean().exec(function (err, listings) {
+  Listing.find({$and: [{ 'user_id': userId }, {status: {$not: { $eq: 'INVALID_ASIN' }}}]}, {
+    'data.Description': 0,
+    'data.ItemSpecifics': 0,
+    'data.PrimaryCategory': 0,
+    'data.PayPalEmailAddress': 0
+  }).lean().exec(function (err, listings) {
     return res.end(JSON.stringify(listings));
   });
 };

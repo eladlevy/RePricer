@@ -107,11 +107,11 @@ define([
                 collection: revisions
             });
 
-            //this.filter = new Backgrid.Extension.ClientSideFilter({
-            //    collection: runs,
-            //    fields: ['asin'],
-            //    placeholder: 'Type asin'
-            //});
+            this.filter = new Backgrid.Extension.ClientSideFilter({
+                collection: revisions,
+                fields: ['asin', 'itemId'],
+                placeholder: 'Asin or item id'
+            });
 
             revisions.fetch();
         },
@@ -120,6 +120,8 @@ define([
             this.grid.render();
             this.$(".table-holder").append(this.grid.el);
             this.$(".table-holder").after(this.paginator.render().el);
+            this.$('.table-holder').before(this.filter.render().el);
+            $(this.filter.el).css({float: "right", margin: "20px", 'margin-top': 0});
         }
     });
 
