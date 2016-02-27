@@ -37,7 +37,7 @@ var buildDescription = function(features, description, title, images) {
 };
 
 var buildItemSpecifics = function(itemAttributes) {
-    var keys = ['Brand', 'UPC', 'Color', 'Size'];
+    var keys = ['Brand', 'UPC', 'Color', 'Size', 'MPN'];
     var result = [];
     _.each(keys, function(key) {
         if (itemAttributes[key]) {
