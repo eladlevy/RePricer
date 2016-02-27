@@ -206,6 +206,15 @@ exports.postLister = function(req, res) {
     });
 
     Listing.create(listings, function(err, listingItems) {
+        if (err) {
+            console.log('Mongo error');
+            console.log(err);
+            req.flash('errors', { msg: 'You are trying to upload an existing asin' });
+            res.render('lister', {
+                title: 'Lister'
+            });
+            return;
+        }
         startListing(req.user, listingItems);
         req.flash('success', { msg: listingItems.length + ' items queued for listing!' });
         res.render('lister', {
