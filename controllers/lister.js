@@ -45,6 +45,11 @@ var buildItemSpecifics = function(itemAttributes) {
                 Name: key,
                 Value: itemAttributes[key]
             });
+        } else {
+            result.push({
+                Name: key,
+                Value: 'Does not apply'
+            });
         }
     });
 
