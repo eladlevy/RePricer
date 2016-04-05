@@ -66,7 +66,7 @@ var mapToEbayKeys = function(listing, amazonAttributes) {
     var description = _.findWhere(amazonAttributes.EditorialReviews.EditorialReview, {Source: 'Product Description'});
     var title = amazonAttributes.ItemAttributes.Title.substring(0, MAX_TITLE_LIMIT);
     var images = _.pluck(_.pluck(amazonAttributes.ImageSets.ImageSet.slice(0, MAX_IMAGES_LIMIT), 'LargeImage'), 'URL').reverse();
-    console.log(JSON.stringify(amazonAttributes.ItemAttributes.UPC));
+    console.log(JSON.stringify(amazonAttributes.ItemAttributes));
     var data = {
         Title: title,
         //Quantity: amazonAttributes.ItemAttributes.PackageQuantity,
