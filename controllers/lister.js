@@ -37,7 +37,7 @@ var buildDescription = function(features, description, title, images) {
 };
 
 var buildItemSpecifics = function(itemAttributes) {
-    var keys = ['Brand', 'Color', 'Size', 'MPN'];
+    var keys = ['Brand', 'Color', 'Size'];
     var result = [];
     _.each(keys, function(key) {
         if (itemAttributes[key]) {
@@ -88,7 +88,7 @@ var mapToEbayKeys = function(listing, amazonAttributes) {
     };
     console.log('PRE MERGED DATA', JSON.stringify(data));
     console.log('PRE PRE MERGED DATA', listing.toObject().data);
-    listing.data = _.defaults(data, listing.toObject().data || {});
+    listing.data = _.extend(data, listing.toObject().data || {});
     console.log('MERGED DATA', JSON.stringify(listing.data));
 };
 
