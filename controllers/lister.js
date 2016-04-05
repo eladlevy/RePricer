@@ -37,7 +37,7 @@ var buildDescription = function(features, description, title, images) {
 };
 
 var buildItemSpecifics = function(itemAttributes) {
-    var keys = ['Brand', 'UPC', 'Color', 'Size', 'MPN'];
+    var keys = ['Brand', 'Color', 'Size', 'MPN'];
     var result = [];
     _.each(keys, function(key) {
         if (itemAttributes[key]) {
@@ -72,6 +72,9 @@ var mapToEbayKeys = function(listing, amazonAttributes) {
         Description: buildDescription(amazonAttributes.ItemAttributes.Feature, description, title, images),
         StartPrice: '300.0',
         Quantity: '0',
+        ProductListingDetails: {
+            UPC: amazonAttributes.ItemAttributes.UPC    
+        },
         PictureDetails: {
             PictureURL: images
         },
