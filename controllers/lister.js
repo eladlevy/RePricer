@@ -88,8 +88,8 @@ var mapToEbayKeys = function(listing, amazonAttributes) {
     };
     console.log('PRE MERGED DATA', JSON.stringify(data));
     console.log('PRE PRE MERGED DATA', listing.toObject().data);
-    listing.data = _.extendOwn(data, listing.toObject().data || {});
-    console.log('MERGED DATA', JSON.stringify(listing.data));
+    listing.data = _.extendOwn(listing.toObject().data || {}, data);
+    console.log('MERGED DATA', JSON.stringify(_.extendOwn(listing.toObject().data || {}, data)));
 };
 
 var startListing = function(user, docs) {
