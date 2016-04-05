@@ -74,7 +74,9 @@ var mapToEbayKeys = function(listing, amazonAttributes) {
         StartPrice: '300.0',
         Quantity: '0',
         ProductListingDetails: {
-            UPC: amazonAttributes.ItemAttributes.UPC    
+            UPC: amazonAttributes.ItemAttributes.UPC || 'Does not apply',
+            ISBN: amazonAttributes.ItemAttributes.ISBN || 'Does not apply',
+            MPN: amazonAttributes.ItemAttributes.MPN || 'Does not apply'
         },
         PictureDetails: {
             PictureURL: images
