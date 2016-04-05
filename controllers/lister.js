@@ -86,7 +86,10 @@ var mapToEbayKeys = function(listing, amazonAttributes) {
         },
         PrimaryCategory: {CategoryID: amazonAttributes.categoryId || '377'}
     };
+    console.log('PRE MERGED DATA', JSON.stringify(data));
+    console.log('PRE PRE MERGED DATA', listing.toObject().data);
     listing.data = _.defaults(data, listing.toObject().data || {});
+    console.log('MERGED DATA', JSON.stringify(listing.data));
 };
 
 var startListing = function(user, docs) {
