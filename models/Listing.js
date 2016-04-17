@@ -26,6 +26,11 @@ var listingSchema = new mongoose.Schema({
     ItemSpecifics: {
       NameValueList: { type : Array , "default" : [] }
     },
+    ProductListingDetails: {
+      UPC: {type: String, default: ''},
+      ISBN: {type: String, default: ''},
+      MPN: {type: String, default: ''}
+    },
     Quantity:{ type: String, default: '0' },
     PrimaryCategory: {CategoryID: String},
     PayPalEmailAddress: { type: String, default: '' }
